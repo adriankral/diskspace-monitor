@@ -5,7 +5,7 @@ var ERR_NO_PATH = "no path provided";
 var DEF_UNIT = "MB";
 
 var attributes = {
-  timeout: setTimeout,
+  queryTimeout: setQueryTimeout,
   lowSpaceThres: setLowSpaceThres,
   highSpaceThres: setHighSpaceThres
 };
@@ -19,7 +19,7 @@ var spaceFactor = {
 
 function DiskSpaceMonitor(_path)
 {
-  if(!path)
+  if(!_path)
     throw new Error(ERR_NO_PATH);
   this.path = _path;
 }
@@ -54,21 +54,23 @@ function activate(_args)
 {
   for(_arg in _args)
   {
-    if(!attributes[arg])
+    if(!attributes[_arg])
       continue;
-    if(!attributes[arg].apply(this, _args[_arg]))
+    if(!attributes[_arg].apply(this, _args[_arg]))
+    {
       return false;
+    }
   }
   if(!this.queryTimeout)
     return false;
   this.diskSpaceQuery =
-    setTimeout(makeDiskSpaceQuery.apply(this), this.queryTimeout);
+    setInterval(makeDiskSpaceQuery.bind(this), this.queryTimeout);
   return true;
 }
 
 function deactivate()
 {
-  clearTimeout(this.diskSpaceQuery);
+  clearInterval(this.diskSpaceQuery);
   return true;
 }
 
@@ -84,7 +86,7 @@ function makeDiskSpaceQuery()
       else if(this.highSpaceThres && free > this.highSpaceThres)
         this.emit('highDiskSpace', free / spaceFactor[this.highSpaceUnit]);
     }
-  });
+  }.bind(this));
   return true;
 }
 
