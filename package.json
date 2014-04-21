@@ -1,0 +1,24 @@
+{
+  "name": "diskspace-monitor",
+  "version": "0.0.1",
+  "description": "This is a simple module for Node.js to continously keep track on available disk space and react to its changes via events.",
+  "main": "diskspace-monitor.js",
+  "scripts": {
+    "test": "make test REPORTER=spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adriankral/diskspace-monitor"
+  },
+  "keywords": [
+    "disk",
+    "space",
+    "diskspace",
+    "monitor"
+  ],
+  "author": "Adrian Rudolf Kral",
+  "license": "MIT",
+  "dependencies": {
+    "diskspace": "~0.1.6"
+  }
+}
